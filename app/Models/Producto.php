@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Producto extends Model
+{
+    public $primaryKey = 'producto_id';
+    
+    public $fillable = [
+        'nombre_producto',
+        'descripcion',
+        'precio_unitario',
+        'stock',
+        'iva_porcentaje'
+    ];
+
+    public $timestamps = false;
+
+    public function facturas()
+    {
+        return $this->belongsToMany(Factura::class, 'detalle_facturas', 'producto_id', 'factura_id')
+                    ->withPivot('detalle_id', 'cantidad', 'precio_venta', 'subtotal_linea');
+    }
+}
