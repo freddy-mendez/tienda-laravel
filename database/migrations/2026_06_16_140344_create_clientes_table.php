@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('direccion', 150)->nullable();
             $table->string('ciudad', 50)->default('Bogotá');
             $table->timestamp('fecha_registro')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->foreignId('user_id')->references('id')->on('users');
         });
     }
 

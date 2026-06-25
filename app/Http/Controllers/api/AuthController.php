@@ -6,6 +6,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -18,12 +19,15 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
             'confirm_password' => 'required|string|min:8|same:password',
         ]);
+
+        $role = Role::where('nombre', 'cliente')->first();
  
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'confirm_password' => bcrypt($request->password),
+            'role_id' => $role->id,
         ]);
  
         // Crear token para el dispositivo móvil o cliente API

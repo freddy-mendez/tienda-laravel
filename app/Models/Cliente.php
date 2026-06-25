@@ -18,7 +18,8 @@ class Cliente extends Model
         'email',
         'direccion',
         'ciudad',
-        'fecha_registro'
+        'fecha_registro',
+        'user_id'
     ];
 
     public $timestamps = false;
@@ -27,5 +28,11 @@ class Cliente extends Model
     {
         return $this->hasMany(Factura::class, 'cliente_id');
     }
+
+    public function cliente()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 
 }
