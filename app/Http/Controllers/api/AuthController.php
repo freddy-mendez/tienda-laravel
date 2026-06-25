@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Cliente;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -29,6 +30,11 @@ class AuthController extends Controller
             'confirm_password' => bcrypt($request->password),
             'role_id' => $role->id,
         ]);
+
+        $request->merge(["user_id"=>$user->id]);
+        $cliente = Cliente::create($request->all());
+
+
  
         // Crear token para el dispositivo móvil o cliente API
         $token = $user->createToken('tienda_api_web')->plainTextToken;
