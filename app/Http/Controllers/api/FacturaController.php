@@ -24,9 +24,27 @@ class FacturaController extends Controller
     public function store(Request $request)
     {
         //
-        $factura = Factura::create($request->all());
-        $factura->load('cliente');
-        return response()->json($factura, 201);
+        $user = Auth()->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        } else if ($user->role->nombre === 'admin' || $user->role->nombre === 'cliente') {
+
+            $factura = Factura::create($request->all());
+            $factura->load('cliente');
+
+            foreach ($request->productos as $producto) {
+                $factura->productos()->attach($producto['producto_id'], [
+                    'cantidad' => $producto['cantidad'],
+                    'precio_venta' => $producto['precio_venta'],
+                    'subtotal_linea' => $producto['cantidad'] * $producto['precio_venta']
+                ]);
+            }
+            $factura->load('productos');
+
+            return response()->json($factura, 201);
+        } else {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
     }
 
     /**

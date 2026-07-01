@@ -15,7 +15,8 @@ class AuthController extends Controller
      public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'confirm_password' => 'required|string|min:8|same:password',
@@ -24,7 +25,7 @@ class AuthController extends Controller
         $role = Role::where('nombre', 'cliente')->first();
  
         $user = User::create([
-            'name' => $request->name,
+            'name' => $request->nombre . ' ' . $request->apellido,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'confirm_password' => bcrypt($request->password),
