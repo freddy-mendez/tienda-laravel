@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Factura;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FacturaController extends Controller
 {
@@ -92,6 +93,31 @@ class FacturaController extends Controller
         }
     }
 
+    public function generarPdf(string $factura_id)
+    {
+        $factura = Factura::find($factura_id);
+
+        if (!$factura) {
+            return response()->json([
+                'message' => 'Factura no encontrada'
+            ], 404);
+        }
+
+        // Cargar relaciones
+        $factura->load([
+            'cliente',
+            'productos'
+        ]);
+
+        // Generar PDF
+        $pdf = Pdf::loadView('facturas.pdf', compact('factura'));
+
+        // Descargar
+        return $pdf->download("factura_{$factura->numero_factura}.pdf");
+
+        // O mostrar en el navegador
+        // return $pdf->stream("factura_{$factura->numero_factura}.pdf");
+    }
     public function agregarProducto(Request $request, string $id)
     {
         $factura = Factura::find($id);

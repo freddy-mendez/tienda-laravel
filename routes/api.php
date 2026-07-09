@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\ClienteController;
 use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\FacturaController;
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\api\AuthController;
 
 
 Route::get('/user', function (Request $request) {
@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('registrar', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('/factura/{factura_id}/pdf', [FacturaController::class, 'generarPdf']);
