@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('registrar', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('producto/{id}/imagen', [ProductoController::class, 'uploadImagen']);
